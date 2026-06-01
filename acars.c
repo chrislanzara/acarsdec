@@ -364,7 +364,9 @@ synced:
 		break;	// else fail
 
 	case TXT:
-		if (unlikely(ch->blk->txtlen > TXTMAXLEN)) {
+		// Use >= so that txtlen == TXTMAXLEN is caught before writing to
+		// txt.raw[TXTMAXLEN], which is one past the end of the buffer.
+		if (unlikely(ch->blk->txtlen >= TXTMAXLEN)) {
 			vprerr("#%d too long\n", ch->chn + 1);
 			break;	// fail
 		}
