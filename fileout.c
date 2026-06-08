@@ -56,12 +56,14 @@ static FILE *open_outfile(fileout_t *fout)
 			vprerr(ERRPFX "open_outfile(): strfime returned 0\n");
 			return NULL;
 		}
-		filename = malloc(fout->prefix_len + tlen + 2);
+		size_t ext_len = fout->extension ? strlen(fout->extension) : 0;
+		size_t filename_len = fout->prefix_len + tlen + ext_len + 1;
+		filename = malloc(filename_len);
 		if (filename == NULL) {
 			perror(ERRPFX "open_outfile()");
 			return NULL;
 		}
-		sprintf(filename, "%s%s%s", fout->filename_prefix, suffix, fout->extension ? fout->extension : "");
+		snprintf(filename, filename_len, "%s%s%s", fout->filename_prefix, suffix, fout->extension ? fout->extension : "");
 	} else {
 		filename = strdup(fout->filename_prefix);
 	}
